@@ -2,7 +2,7 @@ https://blog.csdn.net/learning_tortosie/article/details/89878769
 
 https://www.cnblogs.com/wongyi/p/11057900.html
 
-1. 编译时先编译 code_utils 再编译 imu_utils 再编译 vio_data_simulation-ros 包要一个一个添加进去
+编译时先编译 code_utils 再编译 imu_utils 再编译 vio_data_simulation-ros 包要一个一个添加进去
 
 1. 编译 code_utils
 错误：
@@ -30,6 +30,7 @@ unlink CMakeLists.txt
 3. 在编译 vio_data_simultation 的时候会出现 error：
 	error: ‘random_device’ is not a member of ‘std’    
 	std::random_device rd;
+
 解决办法：包含万能头文件 #include<bits/stdc++.h>
 
 修改gener_alldata下面的imu.bag路径为相对路径 ./imu.bag
