@@ -18,8 +18,8 @@ using namespace cv;
 using namespace Eigen;
 
 const int nDelayTimes = 2;
-string sData_path = "/home/stevencui/dataset/EuRoC/MH-05/mav0/";
-string sConfig_path = "../config/";
+string sData_path = "/home/melodic/dataset/EuRoC/MH-05/mav0/";
+string sConfig_path = "/home/melodic/vio/ch7/vins_sys_code/config/";
 
 std::shared_ptr<System> pSystem;
 

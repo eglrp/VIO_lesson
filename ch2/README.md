@@ -14,13 +14,14 @@
 
 在 code_utils/src/mat_io_test.cpp 中第2行（或者其它报错的文件）添加 backward.hpp 的路径
 ```
-	#include "code_utils/backward.hpp"
+#include "code_utils/backward.hpp"
 ```
 
 ## 错误：
 
 ```
-The specified base path "/home/melodic/桌面/catkin_ch2" contains a CMakeLists.txt but "catkin_make" must be invoked in the root of workspace
+The specified base path "/home/melodic/桌面/catkin_ch2" contains a CMakeLists.txt 
+but "catkin_make" must be invoked in the root of workspace
 ```
 
 解决办法：
@@ -30,13 +31,15 @@ unlink CMakeLists.txt
 ```
 
 关于roslaunch
+
 如果用Github提供的bag就不用改，如果是自己的IMU，就根据IMU的name和topic改。
+
 把roslaunch imu_utils A3.launch中的A3.launch替换为16448.launch就行了，name和topic去16448.launch里面看。
 
 ## 3. 在编译 vio_data_simultation 的时候会出现 error：
 
 ```
-	error: ‘random_device’ is not a member of ‘std’    
+error: ‘random_device’ is not a member of ‘std’    
 	std::random_device rd;
 ```
 
@@ -51,6 +54,8 @@ unlink CMakeLists.txt
 ```
 ./imu.bag
 ```
+
+播放IMU.bag
 
 ```
 rosbag play -r 200 imu.bag

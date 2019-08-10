@@ -2,7 +2,7 @@
 **作者**：贺一家，高翔，崔华坤，赵松
 
 **描述**：
-这是一个用于深蓝学院教学的代码，她基于 VINS-Mono 框架，但不依赖 ROS, Ceres, G2o。这个代码非常基础，目的在于演示仅基于 Eigen 的后端 LM 算法，滑动窗口算法，鲁棒核函数等等 SLAM 优化中常见的算法。
+这是一个用于深蓝学院教学的代码，它基于 VINS-Mono 框架，但不依赖 ROS, Ceres, G2o。这个代码非常基础，目的在于演示仅基于 Eigen 的后端 LM 算法，滑动窗口算法，鲁棒核函数等等 SLAM 优化中常见的算法。
 
 ### Licence
 The source code is released under GPLv3 license.
