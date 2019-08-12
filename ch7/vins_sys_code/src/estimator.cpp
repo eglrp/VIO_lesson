@@ -14,6 +14,17 @@ using namespace myslam;
 Estimator::Estimator() : f_manager{Rs}
 {
     // ROS_INFO("init begins");
+
+    for(int i = 0; i<WINDOW_SIZE+1; i++)
+    {
+        pre_integrations[i] = nullptr;
+    }
+    for(auto& it : all_image_frame)
+    {
+        it.second.pre_integration = nullptr;
+    }
+    tmp_pre_integration = nullptr;
+
     clearState();
 }
 

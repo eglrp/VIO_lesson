@@ -46,7 +46,7 @@ System::~System()
     ofs_pose.close();
 }
 
-void System::PubImageData(double dStampSec, Mat &img)
+void System::PubImageData(double dStampSec, vector<camObs> &imgPts)
 {
     if (!init_feature)
     {
@@ -78,7 +78,7 @@ void System::PubImageData(double dStampSec, Mat &img)
     {
         PUB_THIS_FRAME = true;
         // reset the frequency control
-        if (abs(1.0 * pub_count / (dStampSec - first_image_time) - FREQ) < 0.01 * FREQ)
+        if (abs(1.0 * pub_count / (dStampSec - first_image_time) - FREQ) < 0.01 * FREQ) //yzp 这段是干嘛的??? 如果不满足这个if结果会怎么样???
         {
             first_image_time = dStampSec;
             pub_count = 0;
@@ -91,16 +91,19 @@ void System::PubImageData(double dStampSec, Mat &img)
 
     TicToc t_r;
     // cout << "3 PubImageData t : " << dStampSec << endl;
-    trackerData[0].readImage(img, dStampSec);
 
-    for (unsigned int i = 0;; i++)
-    {
-        bool completed = false;
-        completed |= trackerData[0].updateID(i);
+//    trackerData[0].readImage(imgPts, dStampSec);
+    trackerData[0].readPoints(imgPts,dStampSec);
+//    cout<<"hehe"<<endl;
+//    for (unsigned int i = 0;; i++)
+//    {
+//        bool completed = false;
+//        completed |= trackerData[0].updateID(i);//yzp 不管角点有没有追踪到，都是会有id的
+//
+//        if (!completed)
+//            break;
+//    }
 
-        if (!completed)
-            break;
-    }
     if (PUB_THIS_FRAME)
     {
         pub_count++;
@@ -113,6 +116,7 @@ void System::PubImageData(double dStampSec, Mat &img)
             auto &cur_pts = trackerData[i].cur_pts;
             auto &ids = trackerData[i].ids;
             auto &pts_velocity = trackerData[i].pts_velocity;
+            cout<<"track_cnt:"<<trackerData[i].track_cnt.size()<<std::endl;
             for (unsigned int j = 0; j < ids.size(); j++)
             {
                 if (trackerData[i].track_cnt[j] > 1)
@@ -149,7 +153,7 @@ void System::PubImageData(double dStampSec, Mat &img)
         }
     }
 
-    cv::Mat show_img;
+    /*cv::Mat show_img;
 	cv::cvtColor(img, show_img, CV_GRAY2RGB);
 	if (SHOW_TRACK)
 	{
@@ -162,7 +166,7 @@ void System::PubImageData(double dStampSec, Mat &img)
         cv::namedWindow("IMAGE", CV_WINDOW_AUTOSIZE);
 		cv::imshow("IMAGE", show_img);
         cv::waitKey(1);
-	}
+	}*/
     // cout << "5 PubImage" << endl;
     
 }
@@ -179,7 +183,7 @@ vector<pair<vector<ImuConstPtr>, ImgConstPtr>> System::getMeasurements()
             return measurements;
         }
 
-        if (!(imu_buf.back()->header > feature_buf.front()->header + estimator.td))
+        if (!(imu_buf.back()->header > feature_buf.front()->header + estimator.td)) //yzp  imu.front ............. imu.back ... img.front
         {
             cerr << "wait for imu, only should happen at the beginning sum_of_wait: " 
                 << sum_of_wait << endl;
@@ -187,7 +191,7 @@ vector<pair<vector<ImuConstPtr>, ImgConstPtr>> System::getMeasurements()
             return measurements;
         }
 
-        if (!(imu_buf.front()->header < feature_buf.front()->header + estimator.td))
+        if (!(imu_buf.front()->header < feature_buf.front()->header + estimator.td)) //yzp   img.front .... imu.front ............. imu.back
         {
             cerr << "throw img, only should happen at the beginning" << endl;
             feature_buf.pop();
@@ -197,7 +201,7 @@ vector<pair<vector<ImuConstPtr>, ImgConstPtr>> System::getMeasurements()
         feature_buf.pop();
 
         vector<ImuConstPtr> IMUs;
-        while (imu_buf.front()->header < img_msg->header + estimator.td)
+        while (imu_buf.front()->header < img_msg->header + estimator.td)  //yzp    imu.front ..... img.front ........ imu.back
         {
             IMUs.emplace_back(imu_buf.front());
             imu_buf.pop();
@@ -227,6 +231,7 @@ void System::PubImuData(double dStampSec, const Eigen::Vector3d &vGyr,
     if (dStampSec <= last_imu_t)
     {
         cerr << "imu message in disorder!" << endl;
+        cout<<"last: "<<last_imu_t << " cur: " <<dStampSec<<endl;
         return;
     }
     last_imu_t = dStampSec;
@@ -252,7 +257,7 @@ void System::ProcessBackEnd()
         
         unique_lock<mutex> lk(m_buf);
         con.wait(lk, [&] {
-            return (measurements = getMeasurements()).size() != 0;
+            return (measurements = getMeasurements()).size() != 0;  //yzp 获得IMU数据后唤醒
         });
         if( measurements.size() > 1){
         cout << "1 getMeasurements size: " << measurements.size() 
@@ -269,7 +274,7 @@ void System::ProcessBackEnd()
             for (auto &imu_msg : measurement.first)
             {
                 double t = imu_msg->header;
-                double img_t = imu_msg->header + estimator.td;
+                double img_t = imu_msg->header + estimator.td;//yzp 应该是img_msg
                 if (t <= img_t)
                 {
                     if (current_time < 0)

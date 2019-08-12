@@ -78,21 +78,21 @@ void FeatureTracker::addPoints()
     }
 }
 
-void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
+void FeatureTracker::readImage(const vector<camObs> &_imgPts, double _cur_time)
 {
     cv::Mat img;
     TicToc t_r;
-    cur_time = _cur_time;
+    cur_time = _cur_time; //yzp 时间戳
 
-    if (EQUALIZE)
+/*    if (EQUALIZE)
     {
         cv::Ptr<cv::CLAHE> clahe = cv::createCLAHE(3.0, cv::Size(8, 8));
         TicToc t_c;
-        clahe->apply(_img, img);
+        clahe->apply(_imgPts, img);
         //ROS_DEBUG("CLAHE costs: %fms", t_c.toc());
     }
-    else
-        img = _img;
+    else*/
+//        img = _imgPts;
 
     if (forw_img.empty())
     {
@@ -110,7 +110,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
         TicToc t_o;
         vector<uchar> status;
         vector<float> err;
-        cv::calcOpticalFlowPyrLK(cur_img, forw_img, cur_pts, forw_pts, status, err, cv::Size(21, 21), 3);
+        cv::calcOpticalFlowPyrLK(cur_img, forw_img, cur_pts, forw_pts, status, err, cv::Size(21, 21), 3);// yzp 此时forw_pts里的所有点都是有id的，但是不是所有的点的track_cnt都不是1：当上一帧发布的时候，新进来的点的track_cnt还都是1的
 
         for (int i = 0; i < int(forw_pts.size()); i++)
             if (status[i] && !inBorder(forw_pts[i]))
@@ -154,7 +154,7 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
 
         //ROS_DEBUG("add feature begins");
         TicToc t_a;
-        addPoints();
+        addPoints();//yzp 对新进来的点设置默认id、和默认tarckcount = 1
         //ROS_DEBUG("selectFeature costs: %fms", t_a.toc());
     }
     prev_img = cur_img;
@@ -162,8 +162,46 @@ void FeatureTracker::readImage(const cv::Mat &_img, double _cur_time)
     prev_un_pts = cur_un_pts;
     cur_img = forw_img;
     cur_pts = forw_pts;
-    undistortedPoints();
+    undistortedPoints();//yzp 两个作用： 1.获得归一化坐标系下的点 2.计算当前帧的所有点的归一化坐标以及所有点（老点+新进来的的）在归一化平面的速度
     prev_time = cur_time;
+}
+
+void FeatureTracker::readPoints(const vector<camObs> &_imgPts, double _cur_time)
+{
+    ids.clear();
+    cur_un_pts.clear();
+    cur_pts.clear();
+    pts_velocity.clear();
+
+    //
+    for(auto& data : _imgPts)
+    {
+/*        Eigen::Vector3d unPts;
+        unPts[0] = data.pw[0];
+        unPts[1] = data.pw[1];
+        unPts[2] = data.pw[2];*/
+        ids.push_back(data.pw[3]);
+        cv::Point2f uvPts;
+        uvPts.x = data.un_pc[0] * 460.0 + 255.0;
+        uvPts.y = data.un_pc[1] * 460.0 + 255.0;
+        cur_pts.push_back(uvPts);
+        cur_un_pts.push_back(cv::Point2f(data.un_pc[0],data.un_pc[1]));
+        pts_velocity.push_back(cv::Point2f(0, 0));
+    }
+    static int s1 = 0;
+    if(s1 == 0)
+    {
+        for(int i = 0 ; i < 36 ; i++)
+        {
+            track_cnt.push_back(0);
+        }
+        s1 = 1;
+    }
+
+    for(int i = 0;i<track_cnt.size();i++)
+    {
+        track_cnt[i]++;
+    }
 }
 
 void FeatureTracker::rejectWithF()
@@ -255,6 +293,7 @@ void FeatureTracker::showUndistortion(const string &name)
     cv::waitKey(0);
 }
 
+//yzp 两个作用： 1.获得归一化坐标系下的点 2.计算当前帧的所有点的归一化坐标以及所有点（老点+新进来的的）在归一化平面的速度
 void FeatureTracker::undistortedPoints()
 {
     cur_un_pts.clear();
@@ -266,17 +305,17 @@ void FeatureTracker::undistortedPoints()
         Eigen::Vector3d b;
         m_camera->liftProjective(a, b);
         cur_un_pts.push_back(cv::Point2f(b.x() / b.z(), b.y() / b.z()));
-        cur_un_pts_map.insert(make_pair(ids[i], cv::Point2f(b.x() / b.z(), b.y() / b.z())));
+        cur_un_pts_map.insert(make_pair(ids[i], cv::Point2f(b.x() / b.z(), b.y() / b.z()))); //yzp 这个的作用是把这一帧的id以及归一化坐标记录下来，然后传给prev_un_pts_map
         //printf("cur pts id %d %f %f", ids[i], cur_un_pts[i].x, cur_un_pts[i].y);
     }
     // caculate points velocity
-    if (!prev_un_pts_map.empty())
+    if (!prev_un_pts_map.empty()) //yzp 计算非新进来的点在归一化坐标系下的速度，新进来的点的像素速度设置为0
     {
         double dt = cur_time - prev_time;
         pts_velocity.clear();
         for (unsigned int i = 0; i < cur_un_pts.size(); i++)
         {
-            if (ids[i] != -1)
+            if (ids[i] != -1)//yzp 这一帧新进来的点还是-1
             {
                 std::map<int, cv::Point2f>::iterator it;
                 it = prev_un_pts_map.find(ids[i]);

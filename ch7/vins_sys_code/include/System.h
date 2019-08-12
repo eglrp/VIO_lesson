@@ -45,7 +45,7 @@ public:
 
     ~System();
 
-    void PubImageData(double dStampSec, cv::Mat &img);
+    void PubImageData(double dStampSec, vector<camObs> &imgPts);
 
     void PubImuData(double dStampSec, const Eigen::Vector3d &vGyr, 
         const Eigen::Vector3d &vAcc);
@@ -96,7 +96,7 @@ private:
     Eigen::Vector3d gyr_0;
     bool init_feature = 0;
     bool init_imu = 1;
-    double last_imu_t = 0;
+    double last_imu_t = -1;
     std::ofstream ofs_pose;
     std::vector<Eigen::Vector3d> vPath_to_draw;
     bool bStart_backend;

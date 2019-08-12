@@ -88,3 +88,9 @@ enum NoiseOrder
     O_AW = 6,
     O_GW = 9
 };
+
+typedef struct camObs
+{
+    Eigen::Vector4d pw;
+    Eigen::Vector2d un_pc;
+} camObs;
