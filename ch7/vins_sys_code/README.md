@@ -45,12 +45,18 @@ cd build
 cd build
 ../bin/run_euroc /home/dataset/EuRoC/MH-05/mav0/ ../config/
 
-../bin/run_euroc /home/melodic/dataset/EuRoC/MH-05/mav0/ ../config/
 
 ```
 ![vins](doc/vins.gif)
 
 #### 3. VINs-Mono on Simulation Dataset (todo)
+
+```c++
+cd build
+../bin/run_euroc /home/dataset/EuRoC/MH-05/mav0/ ../config/
+
+
+```
 
 ### 感谢
 

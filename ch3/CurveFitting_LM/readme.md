@@ -9,16 +9,19 @@ backend 文件夹下主要是最小二乘问题求解的一些函数定义。
 ### 代码编译
 
 ``` c++
-cd CurveFitting_LM
+cd CurveFitting_LM/
 mkdir build
-cd build
+cd build/
 cmake ..
-make -j4    
+make -j12
+../app/testCurveFitting
+
 ```
 
 代码运行
 
 ```c++
+cd CurveFitting_LM/app/
 ./CurveFitting_LM
 ```
 

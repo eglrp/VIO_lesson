@@ -2,8 +2,15 @@
 
 深蓝学院VIO课程第一期作业
 
-环境为 	Ubuntu16.04 
-		opencv 3.3.1
+
+环境为 	**Ubuntu16.04 
+		ros-kinetic
+		opencv 3.3.1(无需安装，安装ros之后就有了)
+		cmake 3.5.1
+		eigen 3.3.3  usr/local/include/eigen3
+		ceres 1.14
+		Sophus
+		Pangolin**
 
 
 ##第1节
@@ -49,7 +56,7 @@
 
 
 
-##第11节 大作业
+##第11节 大作业ch9
 
 大作业为两个代码作业, 完成时间为三周:     
 

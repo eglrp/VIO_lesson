@@ -1,3 +1,12 @@
+**Sophus**
+
+需要Eigen Sophus支持
+
+Found Eigen3: /usr/local/include/eigen3 (Required is at least version "3.3.0"
+
+
+
+
 # 文件目录说明
 - frontend 是前端
 - backend 是后端
@@ -12,6 +21,9 @@ cd BA_schur  \\ 进入文件夹
 mkdir build   
 cd build
 cmake ..
-make -j4    
+make -j12
 ```
+
+
+
 
