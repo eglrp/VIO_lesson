@@ -1,4 +1,6 @@
-##依赖项
+# 第1节作业
+
+## 依赖项
 
 **Eigen**
 
@@ -6,6 +8,5 @@
 
 ```
 include_directories( "/usr/include/eigen3" )
-
 find_package( Sophus REQUIRED )
 ```

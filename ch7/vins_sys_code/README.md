@@ -1,4 +1,4 @@
-# Vins Course
+# Vins Course 第7节作业
 **作者**：贺一家，高翔，崔华坤，赵松
 
 **描述**：
@@ -11,41 +11,41 @@ We are still working on improving the code reliability. For any technical issues
 
 For commercial inquiries, please contact Song Zhao <?>
 
-### 安装依赖项：
+---
+### 依赖项：
 
-1. pangolin: <https://github.com/stevenlovegrove/Pangolin>
+1. pangolin  <https://github.com/stevenlovegrove/Pangolin>
 
 2. opencv
 
 3. Eigen
 
-4. Ceres: vins 初始化部分使用了 ceres 做 sfm，所以我们还是需要依赖 ceres. 
+4. Ceres: vins 初始化部分使用了 ceres 做 sfm，所以我们还是需要依赖 ceres.
 
+---
 ### 编译代码
 
 ```c++
 mkdir vins_course
 cd vins_course
 git clone https://github.com/HeYijia/VINS-Course
-mkdir build 
+mkdir build
 cd build
 cmake ..
 make -j4
 ```
-
+---
 ### 运行
 #### 1. CurveFitting Example to Verify Our Solver.
 ```c++
 cd build
-../bin/testCurveFitting 
+../bin/testCurveFitting
 ```
 
 #### 2. VINs-Mono on Euroc Dataset
 ```c++
 cd build
 ../bin/run_euroc /home/dataset/EuRoC/MH-05/mav0/ ../config/
-
-
 ```
 ![vins](doc/vins.gif)
 
@@ -61,4 +61,3 @@ cd build
 ### 感谢
 
 我们使用了港科大沈老师组的 [VINS-Mono](https://github.com/HKUST-Aerial-Robotics/VINS-Mono) 作为基础代码，非常感谢该组的工作。
-

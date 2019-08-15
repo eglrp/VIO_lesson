@@ -1,13 +1,14 @@
-**Sophus**
+# 第5节作业
 
-需要Eigen Sophus支持
+**Eigen** **Sophus**
 
-Found Eigen3: /usr/local/include/eigen3 (Required is at least version "3.3.0"
+Found Eigen3:
+`/usr/local/include/eigen3` (Required is at least version "3.3.0"）
 
 
 
 
-# 文件目录说明
+### 文件目录说明
 - frontend 是前端
 - backend 是后端
 - utils 是工具
@@ -23,7 +24,3 @@ cd build
 cmake ..
 make -j12
 ```
-
-
-
-

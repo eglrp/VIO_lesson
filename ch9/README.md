@@ -1,0 +1,31 @@
+# 大作业
+
+### 大作业为两个代码作业, 完成时间为三周:
+
+第一版作业提交截止：8月25日（周日）23:55
+
+1. 更优的优化策略,:   
+
+   a. 选用更优的 LM 策略, 使得 VINS-Mono 在 MH-05 数据集上收敛速度更快或者精度更高.  
+
+   b. 实现 dog-leg 算法替换 LM 算法, 并测试替换后的 VINS-Mono 在 MH-05 上算法精度.    
+
+   详细的实验报告,包括: 对迭代时间和精度进行评估, 其中精度评估可以采用 evo 工具对轨迹精度进行评估, 轨迹真值在 zip 中已给出.
+
+    evo 工具( https://github.com/MichaelGrupp/evo )
+
+
+2. 更快的 makehessian 矩阵
+
+   可以采用任何一种或多种加速方式 (如多线程, 如sse指令集等) 对信息矩阵的拼接函数加速, 并给出详细的实验对比报告.
+
+
+## Clone the repository and catkin_make:
+
+```
+cd ~/catkin_ws/src
+git clone https://github.com/HKUST-Aerial-Robotics/VINS-Mono.git
+cd ../
+catkin_make
+source ~/catkin_ws/devel/setup.bash
+```

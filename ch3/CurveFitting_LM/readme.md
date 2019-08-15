@@ -1,4 +1,4 @@
-# 说明
+# 第3节作业
 
 ## 代码说明
 
@@ -18,10 +18,9 @@ make -j12
 
 ```
 
-代码运行
+### 代码运行
 
 ```c++
 cd CurveFitting_LM/app/
 ./CurveFitting_LM
 ```
-

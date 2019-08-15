@@ -1,6 +1,6 @@
-###第2节
+# 第2节作业
 
-#2.1 设置IMU仿真代码中的不同参数，生成Allen方差标定曲线。
+## 2.1 设置IMU仿真代码中的不同参数，生成Allen方差标定曲线。
 
 	Allen方差工具：
 
@@ -8,29 +8,31 @@
 
 		（https://github.com/kalibr_allen）
 
-#2.2 将IMU仿真代码中的欧拉积分换成中值积分
+## 2.2 将IMU仿真代码中的欧拉积分换成中值积分
 
-**ceres**
+---
+**依赖项**
+
+	**ceres**
+
+	**libdw-dew**
+```
+sudo apt-get install libdw-dev
+```
 
 
-
-
-###build
+---
+# build
 
 **先编译 code_utils 再编译 imu_utils 再编译 vio_data_simulation-ros 包要一个一个添加进去。**
 
 **imu_utils是一个catkin_make包，需要code_utils支持**
 
-##1. code_utils
+## 1. code_utils
 
 （https://github.com/gaowenliang/code_utils）
 
-**依赖项**
 
-**libdw-dew**
-```
-sudo apt-get install libdw-dev
-```
 
 **code_utils-master编译之前需要在CMakeLists.txt 中需要包含：**
 
@@ -38,7 +40,6 @@ sudo apt-get install libdw-dev
 include_directories("include/code_utils")
 
 ```
-
 
 这一节作业的编译条件限制比较多，需要在根目录下新建文件夹运行。
 
@@ -50,7 +51,7 @@ cd ..
 catkin_make
 ```
 
-##2. imu_utils
+## 2. imu_utils
 ```
 cd ~/ch2_ros_version/src
 git clone https://github.com/gaowenliang/imu_utils.git
@@ -58,10 +59,7 @@ cd ..
 catkin_make
 ```
 
-
-
-##3. vio_data_simultation-ros_version
-
+## 3. vio_data_simultation-ros_version
 ```
 cd ~/ch2_ros_version/src
 git clone https://github.com/HeYijia/vio_data_simulation-ros_version // 手动下载
@@ -71,16 +69,10 @@ catkin_make
 ```
 
 
-
-
-###run
-
+### run
 
 修改gener_alldata下面的imu.bag路径为相对路径
-
-```
-./imu.bag
-```
+`./imu.bag`
 
 播放IMU.bag
 
@@ -99,7 +91,7 @@ rosbag play -r 200 imu.bag
 
 ## 错误：
 ```
-The specified base path "/home/melodic/桌面/catkin_ch2" contains a CMakeLists.txt 
+The specified base path "/home/melodic/桌面/catkin_ch2" contains a CMakeLists.txt
 but "catkin_make" must be invoked in the root of workspace
 ```
 
@@ -107,8 +99,6 @@ but "catkin_make" must be invoked in the root of workspace
 ```
 unlink CMakeLists.txt
 ```
-
-
 
 
 (https://blog.csdn.net/learning_tortosie/article/details/89878769)
