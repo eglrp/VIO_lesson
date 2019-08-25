@@ -1,8 +1,10 @@
 # 第5节作业
 
+![](5-4.png)
+
 **Eigen** **Sophus**
 
-Found Eigen3:
+Found Eigen3:  
 `/usr/local/include/eigen3` (Required is at least version "3.3.0"）
 
 

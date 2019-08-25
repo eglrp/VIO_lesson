@@ -1,4 +1,7 @@
 # Vins Course 第7节作业
+
+![](7-4.png)
+
 **作者**：贺一家，高翔，崔华坤，赵松
 
 **描述**：
@@ -54,8 +57,6 @@ cd build
 ```c++
 cd build
 ../bin/run_euroc /home/dataset/EuRoC/MH-05/mav0/ ../config/
-
-
 ```
 
 ### 感谢
